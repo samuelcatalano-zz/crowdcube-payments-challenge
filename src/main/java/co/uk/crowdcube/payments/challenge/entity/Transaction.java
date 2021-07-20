@@ -1,6 +1,7 @@
 package co.uk.crowdcube.payments.challenge.entity;
 
 import co.uk.crowdcube.payments.challenge.entity.base.BaseEntity;
+import co.uk.crowdcube.payments.challenge.enums.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 public class Transaction extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -29,9 +31,16 @@ public class Transaction extends BaseEntity {
     @ManyToOne
     private Payment payment;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "amount")
     private BigDecimal amount;
 
     @Column(name = "transaction_token")
     private String transactionToken;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private TransactionStatus status;
 }
