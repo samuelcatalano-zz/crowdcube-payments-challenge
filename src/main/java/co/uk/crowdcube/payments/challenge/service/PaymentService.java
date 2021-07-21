@@ -24,7 +24,7 @@ public class PaymentService {
     private final ObjectMapper objectMapper;
 
     @Value("${card.date.expiration.regex}")
-    private String dateOfExpirationRegex;
+    private String expirationRegex;
 
     @Value("${card.security.code.regex}")
     private String securityCodeRegex;
@@ -105,7 +105,7 @@ public class PaymentService {
      * @throws InvalidInformationException to be thrown
      */
     private void validateCardPayment(final PaymentDTO payment) throws InvalidInformationException {
-        if (payment.getNameOnCard().equals("") || payment.getNameOnCard() == null) {
+        if (payment.getNameOnCard() == null || payment.getNameOnCard().equals("")) {
             log.error("Error validating card info: Name on card couldn't be blank!");
             throw new InvalidInformationException("Error validating card info: Name on card couldn't be blank!");
         }
@@ -113,18 +113,12 @@ public class PaymentService {
             log.error("Error validating card info: Card number is not 16-19 digits!");
             throw new InvalidInformationException("Error validating card info: Card number is not 16-19 digits!");
         }
-        if (!payment.getExpiration().matches(dateOfExpirationRegex)) {
-            log.error("Error validating card info: Expiration date has to be MM/YY");
-            throw new InvalidInformationException("Error validating card info: Expiration date has to be MM/YY");
+        if (!payment.getExpiration().matches(expirationRegex)) {
+            log.error("Error validating card info: Expiration date has to be [1-12]/YYYY");
+            throw new InvalidInformationException("Error validating card info: Expiration date has to be [1-12]/YYYY");
         }
 
-        var month = Integer.parseInt(payment.getExpiration().split("/")[0]);
         var year  = Integer.parseInt(payment.getExpiration().split("/")[1]);
-
-        if (month < 1 || month > 12) {
-            log.error("Error validating card info: Expiration date has a invalid month!");
-            throw new InvalidInformationException("Error validating card info: Expiration date has a invalid month!");
-        }
         if (LocalDate.now().getYear() > year) {
             log.error("Error validating card info: The card is expired!");
             throw new InvalidInformationException("Error validating card info: The card is expired!");
