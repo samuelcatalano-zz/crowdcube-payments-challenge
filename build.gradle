@@ -24,6 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "com.stripe:stripe-java:20.64.0"
 
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.9'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
 

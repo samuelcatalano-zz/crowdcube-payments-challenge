@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import static co.uk.crowdcube.payments.challenge.enums.TransactionStatus.REFUNDED;
 import static java.util.UUID.randomUUID;
 
 @Slf4j
@@ -29,6 +31,25 @@ public class TransactionService {
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.paymentRepository = paymentRepository;
+    }
+
+    /**
+     * Return the transaction by its id.
+     * @param id the payment id
+     * @return the payment by its id
+     */
+    public TransactionDTO getTransactionById(final Long id) {
+        var transaction = repository.findById(id).orElse(null);
+        return objectMapper.convertValue(transaction, TransactionDTO.class);
+    }
+
+    /**
+     * Returns all transactions.
+     * @return all transactions
+     */
+    public List<TransactionDTO> getAllTransactions() {
+        var transactions = repository.findAll();
+        return objectMapper.convertValue(transactions, List.class);
     }
 
     /**
@@ -56,6 +77,24 @@ public class TransactionService {
         var transactionDTO = objectMapper.convertValue(transaction, TransactionDTO.class);
         transactionDTO.setPaymentId(null);
         return transactionDTO;
+    }
+
+    /**
+     * Refunds a transaction.
+     * @param id the transaction id
+     * @return transaction refunded
+     * @throws InvalidInformationException to be thrown
+     */
+    public TransactionDTO refundTransaction(final Long id) throws InvalidInformationException {
+        var transaction = repository.findById(id).orElse(null);
+        if (transaction == null) {
+            log.error("Error refund transaction!: transaction with ID "+id+ " not found!");
+            throw new InvalidInformationException("Error refund transaction!: transaction with ID "+id+ " not found!");
+        }
+        transaction.setStatus(REFUNDED);
+        transaction = repository.save(transaction);
+
+        return objectMapper.convertValue(transaction, TransactionDTO.class);
     }
 
     /**
