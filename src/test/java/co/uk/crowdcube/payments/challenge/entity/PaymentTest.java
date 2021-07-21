@@ -41,11 +41,11 @@ public class PaymentTest {
 
         @Test
         void payment_returnsSuccessfulResponse() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             var dto  = objectMapper.convertValue(payment, PaymentDTO.class);
 
-            // when
+            // When
             var response = service.createPayment(dto);
 
             // Then
@@ -59,12 +59,12 @@ public class PaymentTest {
 
         @Test
         void payment_returnsErrorResponseNameOnCard() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             payment.setNameOnCard(null);
             var dto  = objectMapper.convertValue(payment, PaymentDTO.class);
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createPayment(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");
@@ -75,12 +75,12 @@ public class PaymentTest {
 
         @Test
         void payment_returnsErrorResponseCardNumber() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             payment.setCardNumber(5162911108L);
             var dto  = objectMapper.convertValue(payment, PaymentDTO.class);
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createPayment(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");
@@ -91,12 +91,12 @@ public class PaymentTest {
 
         @Test
         void payment_returnsErrorResponseExpirationPattern() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             payment.setExpiration("02/23");
             var dto  = objectMapper.convertValue(payment, PaymentDTO.class);
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createPayment(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");
@@ -107,12 +107,12 @@ public class PaymentTest {
 
         @Test
         void payment_returnsErrorResponseExpirationInvalidMonth() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             payment.setExpiration("13/2021");
             var dto  = objectMapper.convertValue(payment, PaymentDTO.class);
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createPayment(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");
@@ -123,12 +123,12 @@ public class PaymentTest {
 
         @Test
         void payment_returnsErrorResponseExpirationInvalidYear() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             payment.setExpiration("12/2020");
             var dto  = objectMapper.convertValue(payment, PaymentDTO.class);
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createPayment(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");

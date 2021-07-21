@@ -49,7 +49,7 @@ public class TransactionTest {
 
         @Test
         void transaction_returnsSuccessfulResponse() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             var paymentDTO  = objectMapper.convertValue(payment, PaymentDTO.class);
 
@@ -61,7 +61,7 @@ public class TransactionTest {
             dto.setPayment(savedPayment);
             dto.setPaymentId(ID);
 
-            // when
+            // When
             var response = service.createTransaction(dto);
 
             // Then
@@ -73,7 +73,7 @@ public class TransactionTest {
 
         @Test
         void transaction_returnsErrorResponseInvalidPayment() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             var paymentDTO  = objectMapper.convertValue(payment, PaymentDTO.class);
 
@@ -82,7 +82,7 @@ public class TransactionTest {
 
             dto.setPaymentId(ID);
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createTransaction(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");
@@ -93,7 +93,7 @@ public class TransactionTest {
 
         @Test
         void transaction_returnsErrorResponseEmptyDescription() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             var paymentDTO  = objectMapper.convertValue(payment, PaymentDTO.class);
 
@@ -106,7 +106,7 @@ public class TransactionTest {
             dto.setPaymentId(ID);
             dto.setDescription(null);
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createTransaction(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");
@@ -117,7 +117,7 @@ public class TransactionTest {
 
         @Test
         void transaction_returnsErrorResponseInvalidAmount() throws Exception {
-            // given
+            // Given
             var payment = getCompletePayment();
             var paymentDTO  = objectMapper.convertValue(payment, PaymentDTO.class);
 
@@ -130,7 +130,7 @@ public class TransactionTest {
             dto.setPaymentId(ID);
             dto.setAmount(BigDecimal.valueOf(-100.00));
 
-            // Then
+            // When
             final Exception exception = assertThrows(InvalidInformationException.class,
                     () -> service.createTransaction(dto),
                     "Should throw InvalidInformationException with missing or invalid request details");
