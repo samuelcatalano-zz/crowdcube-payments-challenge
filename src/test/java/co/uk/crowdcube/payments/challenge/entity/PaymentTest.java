@@ -33,7 +33,7 @@ public class PaymentTest {
     private static final Long CARD_NUMBER = 5162428146911108L;
     private static final String NAME_ON_CARD = "SAMUEL D N CATALANO";
     private static final String EXPIRATION = "07/2028";
-    public static final String SECURITY_CODE = "079";
+    private static final String SECURITY_CODE = "079";
 
     @Nested
     @DisplayName("Payment")
